@@ -13,7 +13,7 @@ function add_admin_menu() {
     'upload.php',
     __( 'Pexels: Free Stock Photos', 'pexels_fsp_images' ),
     __( 'Pexels Photos', 'pexels_fsp_images' ),
-    'manage_options',
+    'edit_posts',
     'pexels_fsp_images_settings',
     'pexels_fsp_images_settings_page'
   );
@@ -90,7 +90,7 @@ function media_pexels_fsp_images_tab() {
 	   function call_api(q, p){
 	     var xhr = new XMLHttpRequest();
 	     xhr.open('GET', 'https://api.pexels.com/v1/search?query='+encodeURIComponent(q)+'&per_page='+per_page+'&page='+p);
-			 xhr.setRequestHeader('Authorization', '563492ad6f9170000100000147b95f140fe441b858072ac5940c9ba0');
+			 xhr.setRequestHeader('Authorization', '563492ad6f91700001000001a626f8ddac7d48a88fc0856cb7622195');
 	     xhr.onreadystatechange = function(){
 	       if (this.status == 200 && this.readyState == 4) {
 	           var data = JSON.parse(this.responseText);
@@ -270,8 +270,13 @@ if (isset($_POST['pexels_fsp_upload'])) {
 
 	$attach_data = wp_generate_attachment_metadata($attach_id, $target_file_name);
 	$result      = wp_update_attachment_metadata($attach_id, $attach_data);
+
+  /* @TODO: Need to find a more reliable way to fix metadata error
+
 	if ($result === false)
-		die('Error: File attachment metadata error');
+	die('Error: File attachment metadata error');
+
+  */
 
 	$image_data                 = array();
 	$image_data['ID']           = $attach_id;

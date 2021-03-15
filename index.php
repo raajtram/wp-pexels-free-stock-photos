@@ -3,7 +3,7 @@
 	Plugin Name: Pexels: Free Stock Photos
 	Plugin URI: https://raajtram.com/plugins/pexels
 	Description: Pexels provides high quality and completely free stock images for personal and commercial use. This plugin helps you search, browse and download those photos directly to your WordPress site, giving you the benefits of hosting them (cropping, compressing, caching etc.).
-	Version: 1.1
+	Version: 1.2.2
 	Author: Raaj Trambadia
 	Author URI: https://raajtram.com
 	License: GPLv2
