@@ -50,7 +50,7 @@ function media_pexels_fsp_images_tab() {
 	   <form id="pexels_fsp_images_form" style="margin:0">
 	       <div style="line-height:1.5;margin:1em auto;max-width:640px;position:relative">
 	           <input id="q" type="text" value="" style="width:80%;padding:7px 32px 7px 9px" autofocus placeholder="<?= htmlspecialchars(__('Search for images. E.g. "rose", "new york traffic", "sunset"', 'pexels_fsp_images')); ?>">
-						 <button type="submit" id="" style="padding: 9px 24px; line-height:1; height: auto; font-size: 14px;" title="<?= _e('Search', 'pexels_fsp_images'); ?>" class="button button-primary button-large"><span class="">Search</span></button>
+						 <button type="submit" id="" style="padding: 9px 24px; line-height:1; height: auto; font-size: 14px;" title="<?= _e('Search', 'pexels_fsp_images'); ?>" class="button button-primary button-large"><span class=""><?= _e('Search', 'pexels_fsp_images'); ?></span></button>
 	       </div>
 	   </form>
 		 <div style="clear:both;padding:12px 0 0;text-align:center">
