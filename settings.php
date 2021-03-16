@@ -89,7 +89,8 @@ function media_pexels_fsp_images_tab() {
 		 */
 	   function call_api(q, p){
 	     var xhr = new XMLHttpRequest();
-	     xhr.open('GET', 'https://api.pexels.com/v1/search?query='+encodeURIComponent(q)+'&per_page='+per_page+'&page='+p);
+		 var locale = "de-DE"
+	     xhr.open('GET', 'https://api.pexels.com/v1/search?query='+encodeURIComponent(q)+'&per_page='+per_page+'&page='+p+'&locale='+locale);
 			 xhr.setRequestHeader('Authorization', '563492ad6f91700001000001a626f8ddac7d48a88fc0856cb7622195');
 	     xhr.onreadystatechange = function(){
 	       if (this.status == 200 && this.readyState == 4) {
@@ -216,7 +217,7 @@ if (isset($_POST['pexels_fsp_upload'])) {
 		die('Error: ' . $response->get_error_message());
 
 	$q_tags = explode(' ', sanitize_text_field($_POST['q']));
-	array_splice($q_tags, 2);
+	array_splice($q_tags, 3);
 	foreach ($q_tags as $k => $v) {
 		// remove ../../../..
 		$v          = str_replace("..", "", $v);
