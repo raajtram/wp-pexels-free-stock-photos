@@ -8,6 +8,7 @@
 	Author URI: https://raajtram.com
 	License: GPLv2
 	Text Domain: pexels_fsp_images
+	Domain Path: /languages
 */
 
 /* Add Plugin Settings */
@@ -20,5 +21,12 @@ function pexels_fsp_action_links( $links ) {
    $links[] = '<a href="'. esc_url( get_admin_url(null, 'upload.php?page=pexels_fsp_images_settings') ) .'">Get Photos</a>';
    return $links;
 }
+
+/* Load plugin textdomain */
+function plugin_load_textdomain() {
+   load_plugin_textdomain( 'pexels_fsp_images', false, basename( dirname( __FILE__ ) ) . '/languages/' ); 
+} 
+
+add_action( 'init', 'plugin_load_textdomain' );
 
 ?>
