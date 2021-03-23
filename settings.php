@@ -6,13 +6,20 @@
 	Author: Raaj Trambadia (https://raajtram.com)
 */
 
-wp_enqueue_script( 'pexels_fsp_images_script', plugin_dir_url( __FILE__ ) . 'pexels_fsp_images.js' );
 
-$options = get_option( 'pexels_fsp_images_options' );
-wp_add_inline_script( 'pexels_fsp_images_script', 'const OPTIONS = ' . json_encode( array(
-		'searchLocale' => $options['search_locale'],
-		'apiKey'       => $options['api_key'],
-	) ), 'before' );
+/**
+ * Register and enqueue a custom scripts in the WordPress admin.
+ */
+function pexels_fsp_images_enqueue_custom_admin_style() {
+	wp_enqueue_script( 'pexels_fsp_images_script', plugin_dir_url( __FILE__ ) . 'pexels_fsp_images.js' );
+	$options = get_option( 'pexels_fsp_images_options' );
+	wp_add_inline_script( 'pexels_fsp_images_script', 'const OPTIONS = ' . json_encode( array(
+			'searchLocale' => $options['search_locale'],
+			'apiKey'       => $options['api_key'],
+		) ), 'before' );
+}
+
+add_action( 'admin_enqueue_scripts', 'pexels_fsp_images_enqueue_custom_admin_style' );
 
 /* Add the menu */
 
