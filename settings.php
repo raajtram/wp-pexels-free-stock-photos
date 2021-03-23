@@ -11,6 +11,7 @@ wp_enqueue_script( 'pexels_fsp_images_script', plugin_dir_url(__FILE__) . 'pexel
 $options = get_option('pexels_fsp_images_options');
 wp_add_inline_script( 'pexels_fsp_images_script', 'const OPTIONS = ' . json_encode( array(
     'searchLocale' => $options['search_locale'],
+    'apiKey' => $options['api_key'],
 ) ), 'before' );
 
 /* Add the menu */
@@ -42,10 +43,16 @@ function register_pexels_fsp_images_options(){
         'pexels_fsp_images_settings', // Page
         'pexels_fsp_images_options_section' // Section
     );
+    add_settings_field(
+        'api-key-id', 
+        __( 'Pexels API Key', 'pexels_fsp_images' ), // Title 
+        'pexels_fsp_images_render_pexels_api_key', // Callback
+        'pexels_fsp_images_settings', // Page
+        'pexels_fsp_images_options_section' // Section
+    );
 }
 
 /* Attribution field */
-
 function pexels_fsp_images_render_attribution(){
     $options = get_option('pexels_fsp_images_options');
     echo '<label><input name="pexels_fsp_images_options[attribution]" value="true" type="checkbox"'.(!$options['attribution'] | $options['attribution']=='true'?' checked="checked"':'').'> '.__('Automatically insert image captions with attribution.', 'pexels_fsp_images').'</label>';
@@ -57,6 +64,14 @@ function pexels_fsp_images_render_search_locale() {
     printf(
         '<input type="text" id="search_locale" name="pexels_fsp_images_options[search_locale]" value="%s" />',
         isset( $options['search_locale'] ) ? esc_attr( $options['search_locale'] ) : ''
+    );
+}
+
+function pexels_fsp_images_render_pexels_api_key() {
+    $options = get_option('pexels_fsp_images_options');
+    printf(
+        '<input type="text" id="api_key" name="pexels_fsp_images_options[api_key]" value="%s" />',
+        isset( $options['api_key'] ) ? esc_attr( $options['api_key'] ) : ''
     );
 }
 
@@ -195,6 +210,9 @@ function pexels_fsp_images_options_validate($input){
 
     if( isset( $input['search_locale'] ) )
         $options['search_locale'] = sanitize_text_field( $input['search_locale'] );
+
+    if( isset( $input['api_key'] ) )
+        $options['api_key'] = sanitize_text_field( $input['api_key'] );
 
     return $options;
 }
