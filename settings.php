@@ -8,6 +8,11 @@
 
 wp_enqueue_script( 'pexels_fsp_images_script', plugin_dir_url(__FILE__) . 'pexels_fsp_images.js' );
 
+$options = get_option('pexels_fsp_images_options');
+wp_add_inline_script( 'pexels_fsp_images_script', 'const OPTIONS = ' . json_encode( array(
+    'searchLocale' => $options['search_locale'],
+) ), 'before' );
+
 /* Add the menu */
 
 function add_admin_menu() {
@@ -30,6 +35,13 @@ function register_pexels_fsp_images_options(){
     register_setting('pexels_fsp_images_options', 'pexels_fsp_images_options', 'pexels_fsp_images_options_validate');
     add_settings_section('pexels_fsp_images_options_section', '', '', 'pexels_fsp_images_settings');
     add_settings_field('attribution-id', __('Attribution', 'pexels_fsp_images'), 'pexels_fsp_images_render_attribution', 'pexels_fsp_images_settings', 'pexels_fsp_images_options_section');
+    add_settings_field(
+        'search-locale-id', // ID
+        __( 'Search locale', 'pexels_fsp_images' ), // Title
+        'pexels_fsp_images_render_search_locale', // Callback
+        'pexels_fsp_images_settings', // Page
+        'pexels_fsp_images_options_section' // Section
+    );
 }
 
 /* Attribution field */
@@ -39,6 +51,14 @@ function pexels_fsp_images_render_attribution(){
     echo '<label><input name="pexels_fsp_images_options[attribution]" value="true" type="checkbox"'.(!$options['attribution'] | $options['attribution']=='true'?' checked="checked"':'').'> '.__('Automatically insert image captions with attribution.', 'pexels_fsp_images').'</label>';
 }
 
+/* Get the settings option array and print one of its values */
+function pexels_fsp_images_render_search_locale() {
+    $options = get_option('pexels_fsp_images_options');
+    printf(
+        '<input type="text" id="search_locale" name="pexels_fsp_images_options[search_locale]" value="%s" />',
+        isset( $options['search_locale'] ) ? esc_attr( $options['search_locale'] ) : ''
+    );
+}
 
 /* The actions inside the iframe i.e. the works!
  ** The function must begin with "media_" so wp_iframe() adds media css styles)
@@ -172,6 +192,10 @@ function pexels_fsp_images_options_validate($input){
     global $pexels_fsp_images_gallery_languages;
     $options = get_option('pexels_fsp_images_options');
     if ($input['attribution']) $options['attribution'] = 'true'; else $options['attribution'] = 'false';
+
+    if( isset( $input['search_locale'] ) )
+        $options['search_locale'] = sanitize_text_field( $input['search_locale'] );
+
     return $options;
 }
 
