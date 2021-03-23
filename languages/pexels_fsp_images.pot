@@ -1,0 +1,70 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Pexels: Free Stock Photos\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-15 21:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.2; wp-5.7\n"
+"X-Domain: pexels_fsp_images"
+
+#: settings.php:30
+msgid "Attribution"
+msgstr ""
+
+#: settings.php:37
+msgid "Automatically insert image captions with attribution."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://raajtram.com"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://raajtram.com/plugins/pexels"
+msgstr ""
+
+#: settings.php:98
+msgid "No matches"
+msgstr ""
+
+#: settings.php:15
+msgid "Pexels Photos"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Pexels provides high quality and completely free stock images for personal "
+"and commercial use. This plugin helps you search, browse and download those "
+"photos directly to your WordPress site, giving you the benefits of hosting "
+"them (cropping, compressing, caching etc.)."
+msgstr ""
+
+#. Name of the plugin
+#: settings.php:14
+msgid "Pexels: Free Stock Photos"
+msgstr ""
+
+#: settings.php:166
+msgid "Pexels: Free Stock Photos Images"
+msgstr ""
+
+#. Author of the plugin
+msgid "Raaj Trambadia"
+msgstr ""
+
+#: settings.php:53
+msgid "Search"
+msgstr ""
+
+#: settings.php:52
+msgid "Search for images. E.g. \"rose\", \"new york traffic\", \"sunset\""
+msgstr ""

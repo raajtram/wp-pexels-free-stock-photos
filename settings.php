@@ -6,6 +6,13 @@
 	Author: Raaj Trambadia (https://raajtram.com)
 */
 
+wp_enqueue_script( 'pexels_fsp_images_script', plugin_dir_url(__FILE__) . 'pexels_fsp_images.js' );
+
+$options = get_option('pexels_fsp_images_options');
+wp_add_inline_script( 'pexels_fsp_images_script', 'const OPTIONS = ' . json_encode( array(
+    'searchLocale' => $options['search_locale'],
+) ), 'before' );
+
 /* Add the menu */
 
 function add_admin_menu() {
@@ -13,7 +20,7 @@ function add_admin_menu() {
     'upload.php',
     __( 'Pexels: Free Stock Photos', 'pexels_fsp_images' ),
     __( 'Pexels Photos', 'pexels_fsp_images' ),
-    'manage_options',
+    'edit_posts',
     'pexels_fsp_images_settings',
     'pexels_fsp_images_settings_page'
   );
@@ -28,6 +35,13 @@ function register_pexels_fsp_images_options(){
     register_setting('pexels_fsp_images_options', 'pexels_fsp_images_options', 'pexels_fsp_images_options_validate');
     add_settings_section('pexels_fsp_images_options_section', '', '', 'pexels_fsp_images_settings');
     add_settings_field('attribution-id', __('Attribution', 'pexels_fsp_images'), 'pexels_fsp_images_render_attribution', 'pexels_fsp_images_settings', 'pexels_fsp_images_options_section');
+    add_settings_field(
+        'search-locale-id', // ID
+        __( 'Search locale', 'pexels_fsp_images' ), // Title
+        'pexels_fsp_images_render_search_locale', // Callback
+        'pexels_fsp_images_settings', // Page
+        'pexels_fsp_images_options_section' // Section
+    );
 }
 
 /* Attribution field */
@@ -37,6 +51,14 @@ function pexels_fsp_images_render_attribution(){
     echo '<label><input name="pexels_fsp_images_options[attribution]" value="true" type="checkbox"'.(!$options['attribution'] | $options['attribution']=='true'?' checked="checked"':'').'> '.__('Automatically insert image captions with attribution.', 'pexels_fsp_images').'</label>';
 }
 
+/* Get the settings option array and print one of its values */
+function pexels_fsp_images_render_search_locale() {
+    $options = get_option('pexels_fsp_images_options');
+    printf(
+        '<input type="text" id="search_locale" name="pexels_fsp_images_options[search_locale]" value="%s" />',
+        isset( $options['search_locale'] ) ? esc_attr( $options['search_locale'] ) : ''
+    );
+}
 
 /* The actions inside the iframe i.e. the works!
  ** The function must begin with "media_" so wp_iframe() adds media css styles)
@@ -50,7 +72,7 @@ function media_pexels_fsp_images_tab() {
 	   <form id="pexels_fsp_images_form" style="margin:0">
 	       <div style="line-height:1.5;margin:1em auto;max-width:640px;position:relative">
 	           <input id="q" type="text" value="" style="width:80%;padding:7px 32px 7px 9px" autofocus placeholder="<?= htmlspecialchars(__('Search for images. E.g. "rose", "new york traffic", "sunset"', 'pexels_fsp_images')); ?>">
-						 <button type="submit" id="" style="padding: 9px 24px; line-height:1; height: auto; font-size: 14px;" title="<?= _e('Search', 'pexels_fsp_images'); ?>" class="button button-primary button-large"><span class="">Search</span></button>
+						 <button type="submit" id="" style="padding: 9px 24px; line-height:1; height: auto; font-size: 14px;" title="<?= _e('Search', 'pexels_fsp_images'); ?>" class="button button-primary button-large"><span class=""><?= _e('Search', 'pexels_fsp_images'); ?></span></button>
 	       </div>
 	   </form>
 		 <div style="clear:both;padding:12px 0 0;text-align:center">
@@ -82,30 +104,8 @@ function media_pexels_fsp_images_tab() {
 	       jQuery('#pexels_fsp_results').html('');
 	       call_api(q, 1);
 	   });
-		 /*
-		 		Initiate the call to the Pexels API (https://www.pexels.com/api/)
-				An API key is provided upon request, hence hardcoded here.
-				No user action required upon installation.
-		 */
-	   function call_api(q, p){
-	     var xhr = new XMLHttpRequest();
-	     xhr.open('GET', 'https://api.pexels.com/v1/search?query='+encodeURIComponent(q)+'&per_page='+per_page+'&page='+p);
-			 xhr.setRequestHeader('Authorization', '563492ad6f9170000100000147b95f140fe441b858072ac5940c9ba0');
-	     xhr.onreadystatechange = function(){
-	       if (this.status == 200 && this.readyState == 4) {
-	           var data = JSON.parse(this.responseText);
-	           if (!(data.total_results > 0)) {
-	               jQuery('#pexels_fsp_results').html('<div style="color:#bbb;font-size:24px;text-align:center;margin:40px 0">—— <?= _e('No matches', 'pexels_fsp_images') ?> ——</div>');
-	               return false;
-	           }
-	           render_px_results(q, p, data);
-	       }
-	     };
-	     xhr.send();
-	     return false;
-	   }
 
-	   function render_px_results(q, p, data){
+       function render_px_results(q, p, data){
 		 	 /* store for upload click */
 	     photos = data['photos'];
 			 /* pagination */
@@ -192,6 +192,10 @@ function pexels_fsp_images_options_validate($input){
     global $pexels_fsp_images_gallery_languages;
     $options = get_option('pexels_fsp_images_options');
     if ($input['attribution']) $options['attribution'] = 'true'; else $options['attribution'] = 'false';
+
+    if( isset( $input['search_locale'] ) )
+        $options['search_locale'] = sanitize_text_field( $input['search_locale'] );
+
     return $options;
 }
 
@@ -216,7 +220,7 @@ if (isset($_POST['pexels_fsp_upload'])) {
 		die('Error: ' . $response->get_error_message());
 
 	$q_tags = explode(' ', sanitize_text_field($_POST['q']));
-	array_splice($q_tags, 2);
+	array_splice($q_tags, 3);
 	foreach ($q_tags as $k => $v) {
 		// remove ../../../..
 		$v          = str_replace("..", "", $v);
@@ -270,8 +274,13 @@ if (isset($_POST['pexels_fsp_upload'])) {
 
 	$attach_data = wp_generate_attachment_metadata($attach_id, $target_file_name);
 	$result      = wp_update_attachment_metadata($attach_id, $attach_data);
+
+  /* @TODO: Need to find a more reliable way to fix metadata error
+
 	if ($result === false)
-		die('Error: File attachment metadata error');
+	die('Error: File attachment metadata error');
+
+  */
 
 	$image_data                 = array();
 	$image_data['ID']           = $attach_id;
