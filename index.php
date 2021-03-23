@@ -12,20 +12,21 @@
 */
 
 /* Add Plugin Settings */
-include(plugin_dir_path(__FILE__) . 'settings.php');
+include( plugin_dir_path( __FILE__ ) . 'settings.php' );
 
 /* Add the "Settings" Link to the /plugins Page */
-add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'pexels_fsp_action_links' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'pexels_fsp_action_links' );
 
 function pexels_fsp_action_links( $links ) {
-   $links[] = '<a href="'. esc_url( get_admin_url(null, 'upload.php?page=pexels_fsp_images_settings') ) .'">Get Photos</a>';
-   return $links;
+	$links[] = '<a href="' . esc_url( get_admin_url( null, 'upload.php?page=pexels_fsp_images_settings' ) ) . '">Get Photos</a>';
+
+	return $links;
 }
 
 /* Load plugin textdomain */
 function plugin_load_textdomain() {
-   load_plugin_textdomain( 'pexels_fsp_images', false, basename( dirname( __FILE__ ) ) . '/languages/' ); 
-} 
+	load_plugin_textdomain( 'pexels_fsp_images', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+}
 
 add_action( 'init', 'plugin_load_textdomain' );
 
