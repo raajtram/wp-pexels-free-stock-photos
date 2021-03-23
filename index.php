@@ -14,6 +14,9 @@
 /* Add Plugin Settings */
 include( plugin_dir_path( __FILE__ ) . 'settings.php' );
 
+/* Add Plugin implementation */
+include( plugin_dir_path( __FILE__ ) . 'pexels_fsp_images.php' );
+
 /* Add the "Settings" Link to the /plugins Page */
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'pexels_fsp_action_links' );
 
