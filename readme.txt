@@ -3,7 +3,7 @@ Contributors: raajtram
 Donate link: https://raajtram.com
 Tags: pexels, free stock images, stock photos, free photos, pixabay, fotor, unsplash, gutenberg images, free images
 Requires at least: 4.0
-Tested up to: 5.2.3
+Tested up to: 5.5.1
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv2 or later
@@ -57,6 +57,15 @@ No. The plugin indeed downloads the images to your WordPress site, giving you al
 
 == Changelog ==
 
+= 1.2.2 =
+* Allowed access for all roles "Author" and above
+
+= 1.2.1 =
+* Updated API
+
+= 1.2 =
+* Fixed metadata error
+
 = 1.1 =
 * Enabled support for Gutenberg (or any other editor, for that matter!)
 * Moved page under "Media" to facilitate image downloads without depending on the post editor
@@ -79,4 +88,4 @@ No. The plugin indeed downloads the images to your WordPress site, giving you al
 
 == Upgrade Notice ==
 
-This version facilitates use on the new Gutenberg Editor for WordPress (by allowing you to download images independent of the editor)!
+This version facilitates use on the new Gutenberg Editor for WordPress (by allowing you to download images independent of the editor)! Also fixes the metadata error!
